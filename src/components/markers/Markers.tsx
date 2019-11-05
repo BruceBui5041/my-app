@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Marker } from 'react-google-maps';
+import { Marker, InfoWindow } from 'react-google-maps';
 
 interface CustomMarkerProps {
   markers: google.maps.Marker[];
@@ -15,13 +15,16 @@ export const Markers = React.memo((props: CustomMarkerProps) => {
   marker1.setTitle('Khoa oc cho 3');
 
   const [testingArray, setTestingArray] = React.useState([marker, marker1]);
+  const [selectedMarker, setSelectedMarker] = React.useState<
+    google.maps.Marker
+  >();
 
   const onClickMarker = (marker: google.maps.Marker) => {
     marker.setPosition({
       lat: 47.477,
       lng: -122.066
     });
-
+    setSelectedMarker(marker);
     setTestingArray([...testingArray, marker]);
   };
 
@@ -39,10 +42,14 @@ export const Markers = React.memo((props: CustomMarkerProps) => {
           />
         );
       })}
-
-      {/* <InfoWindow onCloseClick={() => setSelectedMarker(null)} position={selectedMarker.position}>
-        <div>{JSON.stringify(selectedMarker)}</div>
-      </InfoWindow> */}
+      {selectedMarker && (
+        <InfoWindow
+          onCloseClick={() => setSelectedMarker(undefined)}
+          position={selectedMarker.getPosition() || null || undefined}
+        >
+          <div>{marker.getTitle() || ''}</div>
+        </InfoWindow>
+      )}
     </>
   );
 });
