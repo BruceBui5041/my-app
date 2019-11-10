@@ -4,16 +4,21 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.2",
+    "@types/firebase": "^3.2.1",
+    "@types/react-redux": "^7.1.5",
+    "firebase": "^7.2.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-google-maps": "^9.4.5",
+    "react-redux": "^7.1.3",
     "react-scripts-ts": "3.1.0",
-    "react-toolbox": "^2.0.0-beta.13",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.1.3",
     "ts-loader": "^6.2.1"
   },
   "scripts": {
     "start": "webpack-dev-server --mode development",
-    "build": "webpack-dev-server",
+    "build": "rm -r -f build && webpack --config webpack.config.js",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
