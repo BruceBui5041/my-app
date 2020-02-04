@@ -1,19 +1,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
+const TerserJSPlugin = require('terser-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = (configEnv = {}, { mode = 'production', $0 = '' }) => {
-	const WEBPACK_DEV_SERVER = $0.includes('webpack-dev-server')
+	const WEBPACK_DEV_SERVER = $0.includes('webpack-dev-server');
 
-	console.log(mode, process.env.APIURL)
+	console.log(mode, process.env.APIURL);
 
 	const webpackConfig = {
 		entry: {
-			bundle: [
-				'./src/index.tsx',
-			]
+			index: ['./src/index.tsx']
 		},
 		output: {
 			filename: '[name].js',
@@ -27,9 +25,15 @@ module.exports = (configEnv = {}, { mode = 'production', $0 = '' }) => {
 		module: {
 			rules: [
 				{
-					test: /\.tsx?$/,
-					loader: 'ts-loader',
-					exclude: /node_modules/,
+					test: /\.(j|t)sx?$/,
+					exclude: /(node_modules)/,
+					use: {
+						loader: 'babel-loader',
+						options: {
+							cacheDirectory: true,
+							cacheCompression: mode === 'production'
+						}
+					}
 				},
 				{
 					test: /\.css$/,
@@ -77,7 +81,7 @@ module.exports = (configEnv = {}, { mode = 'production', $0 = '' }) => {
 	if (mode === 'development') {
 		Object.assign(webpackConfig, {
 			devtool: 'eval-source-map'
-		})
+		});
 	}
 
 	if (WEBPACK_DEV_SERVER) {
@@ -89,8 +93,8 @@ module.exports = (configEnv = {}, { mode = 'production', $0 = '' }) => {
 				hot: true,
 				historyApiFallback: true
 			}
-		})
+		});
 	}
 
 	return webpackConfig;
-}
+};
